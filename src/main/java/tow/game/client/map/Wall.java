@@ -1,9 +1,9 @@
 package tow.game.client.map;
 
 import tow.engine.Global;
-import tow.engine.logger.Logger;
-import tow.engine.image.TextureHandler;
 import tow.engine.gameobject.components.Collision;
+import tow.engine.image.TextureHandler;
+import tow.engine.logger.Logger;
 
 public class Wall extends MapObject {
 
@@ -16,7 +16,7 @@ public class Wall extends MapObject {
         stabillity = getStabilityByType(textureHandler.type);
     }
 
-    private int getStabilityByType(String type){
+    public static int getStabilityByType(String type){
         switch (type){
             case "home": return 100;
             case "tree": return 30;

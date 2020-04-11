@@ -2,6 +2,7 @@ package tow.game;
 
 import tow.engine.resources.JsonContainerLoader;
 import tow.game.client.Storage;
+import tow.game.client.map.Wall;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,11 +17,9 @@ public class GameStart {
         //File f = new File("maps/small.maptest");
         //convert(f, new File("new-maps/" + f.getName()));
 
-        /*
         for(File f : new File("maps").listFiles()){
             convert(f, new File("new-maps/" + f.getName()));
         }
-        */
     }
 
     public static void convert(File input, File output){
@@ -38,7 +37,7 @@ public class GameStart {
             mapContainer.height = h;
 
             MapObjectContainer mapObjectContainerBackground = new MapObjectContainer();
-            mapObjectContainerBackground.type = "scalable_texture";
+            mapObjectContainerBackground.type = "scaled";
             mapObjectContainerBackground.x = 0;
             mapObjectContainerBackground.y = 0;
             mapObjectContainerBackground.z = 0;
@@ -58,6 +57,7 @@ public class GameStart {
                 dir = ((dir%360) + 360) % 360;
                 int z = getDepth(texture);
                 String type = getType(texture);
+                if (type.equals("home") || type.equals("tree")) type = "destroyed";
 
                 MapObjectContainer mapObjectContainer = new MapObjectContainer();
                 mapObjectContainer.type = type;
@@ -67,6 +67,7 @@ public class GameStart {
                 mapObjectContainer.parameters = new TreeMap<>();
                 mapObjectContainer.parameters.put("direction", dir);
                 mapObjectContainer.parameters.put("texture", texture);
+                if (type.equals("destroyed")) mapObjectContainer.parameters.put("stability", Wall.getStabilityByType(getType(texture)));
 
                 mapObjectContainerList.add(mapObjectContainer);
             }
