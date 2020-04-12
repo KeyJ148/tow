@@ -17,8 +17,11 @@ public class GameStart {
         //File f = new File("maps/small.maptest");
         //convert(f, new File("new-maps/" + f.getName()));
 
+        if (! new File("new-maps/").exists()) new File("new-maps/").mkdir();
         for(File f : new File("maps").listFiles()){
-            convert(f, new File("new-maps/" + f.getName()));
+            String outputFileName = "new-maps/" + f.getName();
+            if (!outputFileName.contains(".maptest")) outputFileName = outputFileName.substring(0, outputFileName.indexOf(".map")) + ".json";
+            convert(f, new File(outputFileName));
         }
     }
 
@@ -37,9 +40,9 @@ public class GameStart {
             mapContainer.height = h;
 
             MapObjectContainer mapObjectContainerBackground = new MapObjectContainer();
-            mapObjectContainerBackground.type = "scaled";
-            mapObjectContainerBackground.x = 0;
-            mapObjectContainerBackground.y = 0;
+            mapObjectContainerBackground.type = "repeated";
+            mapObjectContainerBackground.x = w/2;
+            mapObjectContainerBackground.y = h/2;
             mapObjectContainerBackground.z = 0;
             mapObjectContainerBackground.parameters = new TreeMap<>();
             mapObjectContainerBackground.parameters.put("direction", 0);
@@ -68,6 +71,8 @@ public class GameStart {
                 mapObjectContainer.parameters.put("direction", dir);
                 mapObjectContainer.parameters.put("texture", texture);
                 if (type.equals("destroyed")) mapObjectContainer.parameters.put("stability", Wall.getStabilityByType(getType(texture)));
+                if (type.equals("road")) mapObjectContainer.parameters.put("width", getRoadSize(texture));
+                if (type.equals("road")) mapObjectContainer.parameters.put("height", getRoadSize(texture));
 
                 mapObjectContainerList.add(mapObjectContainer);
             }
@@ -80,6 +85,17 @@ public class GameStart {
             e.printStackTrace();
         }
 
+    }
+
+    public static int getRoadSize(String texture){
+        String[][] images = new Storage().getRoadSize();
+        for(String[] image : images){
+            if (image[0].substring(image[0].lastIndexOf("/")+1, image[0].lastIndexOf(".")).equals(texture)){
+                return Integer.parseInt(image[1]);
+            }
+        }
+
+        throw new RuntimeException("Texture not found: " + texture);
     }
 
     public static int getDepth(String texture){

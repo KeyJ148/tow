@@ -9,6 +9,33 @@ public class Storage implements StorageInterface {
     //Фон - Дорога - Танк - Дом - Оружие - Дерево
     //0 - 500 - 1000 - 1500 - 2000 - 2500
 
+    public String[][] getRoadSize(){
+        return new String[][]{
+                {"backwall/road_g.png","64"},
+                {"backwall/road_g_fork.png","64"},
+                {"backwall/road_g_turn.png","64"},
+                {"backwall/road_g_inter.png","64"},
+                {"backwall/road_g_end.png","64"},
+                {"backwall/road_a.png","64"},
+                {"backwall/road_a_big.png","128"},
+                {"backwall/road_a_g.png","64"},
+                {"backwall/road_a_fork.png","64"},
+                {"backwall/road_a_fork_big.png","128"},
+                {"backwall/road_a_inter.png","128"},
+                {"backwall/road_a_d_big.png","128"},
+                {"backwall/road_d.png","64"},
+                {"backwall/road_d_fork.png","64"},
+                {"backwall/road_d_turn.png","64"},
+                {"backwall/road_d_inter.png","64"},
+                {"backwall/road_d_end.png","64"},
+                {"backwall/road_s.png","64"},
+                {"backwall/road_s_fork.png","64"},
+                {"backwall/road_s_turn.png","64"},
+                {"backwall/road_s_inter.png","64"},
+                {"backwall/road_s_end.png","64"}
+        };
+    }
+
     @Override
     public String[][] getImages() {
         return new String[][] {
