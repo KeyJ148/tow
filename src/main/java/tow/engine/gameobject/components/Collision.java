@@ -1,17 +1,16 @@
 package tow.engine.gameobject.components;
 
+import org.lwjgl.opengl.GL11;
 import tow.engine.Global;
 import tow.engine.Vector2;
-import tow.engine.image.Mask;
 import tow.engine.gameobject.GameObject;
-import org.lwjgl.opengl.GL11;
-import tow.engine.image.Color;
 import tow.engine.gameobject.QueueComponent;
 import tow.engine.gameobject.components.render.Rendering;
+import tow.engine.image.Color;
+import tow.engine.image.Mask;
 import tow.engine.resources.settings.SettingsStorage;
 
-import java.awt.Polygon;
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.List;
 public class Collision extends QueueComponent {
 
 	private Mask mask;//Маска для текстуры этого объекта
-	private Vector2<Integer>[] maskAbsolute; //Абсолютные координаты маски от левого верхнего угла карты
+	public Vector2<Integer>[] maskAbsolute; //Абсолютные координаты маски от левого верхнего угла карты
 
 	protected ArrayList<Class> collisionObjects = new ArrayList();//Список объектов с которыми надо проверять столкновения
 	private ArrayList<CollisionListener> listeners = new ArrayList();//Список объектов которых нужно оповещать при коллизии

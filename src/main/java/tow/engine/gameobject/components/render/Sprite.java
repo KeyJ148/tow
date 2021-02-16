@@ -1,10 +1,12 @@
 package tow.engine.gameobject.components.render;
 
-import tow.engine.Vector2;
-import tow.engine.gameobject.components.Position;
-import tow.engine.resources.textures.Texture;
-import tow.engine.image.TextureHandler;
 import org.lwjgl.opengl.GL11;
+import tow.engine.Vector2;
+import tow.engine.gameobject.components.Collision;
+import tow.engine.gameobject.components.Position;
+import tow.engine.image.TextureHandler;
+import tow.engine.map.LightSystem;
+import tow.engine.resources.textures.Texture;
 
 public class Sprite extends Rendering {
 	
@@ -38,16 +40,20 @@ public class Sprite extends Rendering {
 
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0,0);
-        GL11.glVertex2f(-width/2, -height/2);
-        GL11.glTexCoord2f(1,0);
-        GL11.glVertex2f(width/2, -height/2);
-        GL11.glTexCoord2f(1,1);
-        GL11.glVertex2f(width/2, height/2);
-        GL11.glTexCoord2f(0,1);
-        GL11.glVertex2f(-width/2, height/2);
+        GL11.glVertex2f(-width / 2, -height / 2);
+        GL11.glTexCoord2f(1, 0);
+        GL11.glVertex2f(width / 2, -height / 2);
+        GL11.glTexCoord2f(1, 1);
+        GL11.glVertex2f(width / 2, height / 2);
+        GL11.glTexCoord2f(0, 1);
+        GL11.glVertex2f(-width / 2, height / 2);
         GL11.glEnd();
 
         Texture.unbind();
+
+        if (getGameObject().hasComponent(Collision.class)) {
+            LightSystem.render((int) xView, (int) yView, getGameObject().getComponent(Collision.class));
+        }
     }
 
     @Override

@@ -4,9 +4,12 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import tow.engine.Global;
-import tow.engine.logger.Logger;
 import tow.engine.Loader;
+import tow.engine.gameobject.components.Position;
+import tow.engine.logger.Logger;
+import tow.engine.map.LightSystem;
 import tow.engine.resources.settings.SettingsStorage;
+import tow.game.client.ClientData;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -94,7 +97,19 @@ public class Render {
 		glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //Очистка рендера
 
 		Global.game.render(); //Отрисовка в главном игровом классе (ссылка передается в движок при инициализации)
+
+		LightSystem.init(width, height);
 		Global.location.render(getWidth(), getHeight()); //Отрисовка комнаты
+		if (ClientData.player != null) {
+
+			LightSystem.light_dir(
+					(int) ClientData.player.getComponent(Position.class).x,
+					(int) ClientData.player.getComponent(Position.class).y,
+					(int) ClientData.player.getComponent(Position.class).getDirectionDraw(),
+					150, 0);
+		}
+		LightSystem.render();
+
 		Global.engine.gui.render(); //Отрисовка интерфейса (LeGUI)
 		Global.location.getMouse().draw(); //Отрисовка курсора мыши
 	}
