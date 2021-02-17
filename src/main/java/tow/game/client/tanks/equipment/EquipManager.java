@@ -60,7 +60,7 @@ public class EquipManager {
             if (!config.contains(".properties")) continue;
 
             ConfigReader cr = new ConfigReader(Armor.PATH_SETTING + config);
-            if (!contain(cr.findString("ALLOW_GUN").split(" "), ((Gun) player.gun).name)) continue;
+            if (!contain(cr.findString("ALLOW_GUN").split(" "), ((Gun) player.guns[0]).name)) continue;
 
             newArmorName = config.substring(0, config.lastIndexOf("."));
             if (!newArmorName.equals(((Armor) player.armor).name)) exit = true;
@@ -81,7 +81,7 @@ public class EquipManager {
     }
 
     public static void newGun(Player player){
-        String nowGunName = ((Gun) player.gun).name;
+        String nowGunName = ((Gun) player.guns[0]).name;
 
         //Получение валидного имени экиперовки (Которое не равно текущему и соответствует броне и патрону)
         String newGunName;
@@ -106,16 +106,19 @@ public class EquipManager {
         Gun newGun = null;
         try {
             String newGunClassName = new ConfigReader(Gun.PATH_SETTING + newGunName + ".properties").findString("CLASS");
-            String newGunFullPath = getClassPackage(player.gun) + "." + newGunClassName;
-            newGun = (Gun) Class.forName(newGunFullPath).newInstance();
-            newGun.init(player, player.gun.getComponent(Position.class).x, player.gun.getComponent(Position.class).y, player.gun.getComponent(Position.class).getDirectionDraw(), newGunName);
+            String newGunFullPath = getClassPackage(player.guns[0]) + "." + newGunClassName;
+            for (int i = 0; i < player.guns.length; i++) {
+                newGun = (Gun) Class.forName(newGunFullPath).newInstance();
+                newGun.init(player, player.guns[i].getComponent(Position.class).x, player.guns[i].getComponent(Position.class).y,
+                        player.guns[i].getComponent(Position.class).getDirectionDraw(), newGunName, player.gunsPosX[i], player.gunsPosY[i]);
+                player.replaceGun(i, newGun);
+            }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e){
             Global.logger.println("Gun not found: " + newGunName, Logger.Type.ERROR);
             Loader.exit();
         }
 
         //Установление новой пушке параметров как у старой
-        player.replaceGun(newGun);
     }
 
     public static void newBullet(Player player){
@@ -129,7 +132,7 @@ public class EquipManager {
             if (!config.contains(".properties")) continue;
 
             ConfigReader cr = new ConfigReader(Bullet.PATH_SETTING + config);
-            if (!contain(cr.findString("ALLOW_GUN").split(" "), ((Gun) player.gun).name)) continue;
+            if (!contain(cr.findString("ALLOW_GUN").split(" "), ((Gun) player.guns[0]).name)) continue;
 
             newBulletName = config.substring(0, config.lastIndexOf("."));
             if (!newBulletName.equals(player.bullet.name)) exit = true;

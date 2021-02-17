@@ -1,5 +1,7 @@
 package tow.game.client.tanks.enemy;
 
+import tow.engine.gameobject.components.render.Rendering;
+import tow.engine.image.Mask;
 import tow.engine.image.TextureHandler;
 import tow.engine.gameobject.GameObject;
 import tow.engine.gameobject.components.Collision;
@@ -19,6 +21,8 @@ public class EnemyArmor extends GameObject {
 
 		setComponent(new Movement());
 		getComponent(Movement.class).directionDrawEquals = false;
-		setComponent(new Collision(textureHandler[0].mask));
+		getComponent(Rendering.class).scale_x = 2;
+		getComponent(Rendering.class).scale_y = 2;
+		setComponent(new Collision(new Mask("..", textureHandler[0].mask.getWidth()*2, textureHandler[0].mask.getHeight()*2)));
 	}
 }

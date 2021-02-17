@@ -19,6 +19,7 @@ import tow.game.client.tanks.player.Player;
 import tow.engine.image.Color;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Vector;
 
@@ -167,7 +168,7 @@ public class NetGameRead implements NetGameReadInterface {
 		ClientData.enemyBullet = new ArrayList<>();
 		for (Map.Entry<Integer, Enemy> entry: ClientData.enemy.entrySet()) {
 			entry.getValue().armor = null;
-			entry.getValue().gun = null;
+			Arrays.fill(entry.getValue().guns, null);
 			entry.getValue().camera = null;
 			entry.getValue().alive = true;
 		}

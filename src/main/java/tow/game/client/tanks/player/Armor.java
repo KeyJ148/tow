@@ -1,5 +1,6 @@
 package tow.game.client.tanks.player;
 
+import tow.engine.image.Mask;
 import tow.engine.image.TextureHandler;
 import tow.engine.image.TextureManager;
 import tow.engine.map.Border;
@@ -39,15 +40,19 @@ public class Armor extends GameObject {
 
 		setComponent(new Position(x, y, textureHandlers[0].depth, direction));
 		setComponent(new Animation(textureHandlers));
+		getComponent(Rendering.class).scale_x = 2;
+		getComponent(Rendering.class).scale_y = 2;
 		setComponent(new Movement());
 		getComponent(Movement.class).setDirection(direction);
 		getComponent(Movement.class).update(0);
 
-		setComponent(new Collision(textureHandlers[0].mask));
+		setComponent(new Collision(new Mask("..", textureHandlers[0].mask.getWidth()*2, textureHandlers[0].mask.getHeight()*2)));
 		getComponent(Collision.class).addCollisionObjects(new Class[] {Wall.class, EnemyArmor.class, Box.class, Border.class});
 		getComponent(Collision.class).addListener(player.controller);
 
-		if (player.gun != null) player.gun.setComponent(new Follower(this, false));
+		for (int i = 0; i < player.guns.length; i++) {
+			if (player.guns[i] != null) player.guns[i].setComponent(new Follower(this, false, player.gunsPosX[i], player.gunsPosY[i]));
+		}
 	}
 
 	@Override
@@ -80,8 +85,8 @@ public class Armor extends GameObject {
 	public void loadData(){
 		ConfigReader cr = new ConfigReader(getConfigFileName());
 		
-		effect.addition.hpMax = cr.findDouble("HP_MAX");
-		effect.addition.hpRegen = cr.findDouble("HP_REGEN");
+		effect.addition.hpMax = cr.findDouble("HP_MAX")*20;
+		effect.addition.hpRegen = cr.findDouble("HP_REGEN")*20;
 		effect.addition.speedTankUp = cr.findDouble("SPEED_UP");
 		effect.addition.speedTankDown = cr.findDouble("SPEED_DOWN");
 		effect.addition.directionGunUp = cr.findDouble("DIRECTION_GUN_UP");

@@ -11,22 +11,29 @@ public class Follower extends QueueComponent {
 
     public GameObject followUpGameObject;
     public boolean followDirectionDraw;
+    public int deltaX, deltaY;
 
     public Follower(GameObject followUpGameObject) {
         this(followUpGameObject, true);
     }
 
     public Follower(GameObject followUpGameObject, boolean followDirectionDraw) {
+        this(followUpGameObject, followDirectionDraw, 0, 0);
+    }
+
+    public Follower(GameObject followUpGameObject, boolean followDirectionDraw, int deltaX, int deltaY) {
         this.followUpGameObject = followUpGameObject;
         this.followDirectionDraw = followDirectionDraw;
+        this.deltaX = deltaX;
+        this.deltaY = deltaY;
     }
 
     @Override
     public void updateComponent(long delta){
         if (followUpGameObject.hasComponent(Follower.class) && !followUpGameObject.getComponent(Follower.class).isUpdated()) followUpGameObject.getComponent(Follower.class).update(delta);
 
-        getGameObject().getComponent(Position.class).x = followUpGameObject.getComponent(Position.class).x;
-        getGameObject().getComponent(Position.class).y = followUpGameObject.getComponent(Position.class).y;
+        getGameObject().getComponent(Position.class).x = followUpGameObject.getComponent(Position.class).x + deltaX;
+        getGameObject().getComponent(Position.class).y = followUpGameObject.getComponent(Position.class).y + deltaY;
         if (followDirectionDraw) getGameObject().getComponent(Position.class).setDirectionDraw(followUpGameObject.getComponent(Position.class).getDirectionDraw());
         Global.location.mapControl.update(getGameObject());
     }

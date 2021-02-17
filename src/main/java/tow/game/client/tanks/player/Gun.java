@@ -27,7 +27,7 @@ public class Gun extends GameObject {
 	public Player player;
 	public TextureHandler texture;
 
-	public void init(Player player, double x, double y, double direction, String name){
+	public void init(Player player, double x, double y, double direction, String name, int deltaX, int deltaY){
 		this.player = player;
 		this.name = name;
 
@@ -39,7 +39,7 @@ public class Gun extends GameObject {
 		setComponent(new Movement());
 		getComponent(Movement.class).directionDrawEquals = false;
 
-		setComponent(new Follower(player.armor, false));
+		setComponent(new Follower(player.armor, false, deltaX, deltaY));
 	}
 
 	@Override

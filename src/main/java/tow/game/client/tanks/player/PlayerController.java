@@ -130,8 +130,10 @@ public class PlayerController extends GameObject implements Collision.CollisionL
          * Выстрел
          */
         //Если нажата мышь и перезарядилась пушка и игрок вообще может стрелять
-        if (Global.location.getMouse().isButtonDown(GLFW_MOUSE_BUTTON_1) && ((Gun) player.gun).nanoSecFromAttack <= 0 && player.stats.attackSpeed > 0){
-            ((Gun) player.gun).attack(); //Стреляем
+        if (Global.location.getMouse().isButtonDown(GLFW_MOUSE_BUTTON_1) && ((Gun) player.guns[0]).nanoSecFromAttack <= 0 && player.stats.attackSpeed > 0){
+            for (int i = 0; i < player.guns.length; i++) {
+                ((Gun) player.guns[i]).attack(); //Стреляем
+            }
         }
 
         /*
@@ -200,36 +202,38 @@ public class PlayerController extends GameObject implements Collision.CollisionL
         /*
          * Поворот дула пушки (много костылей)
          */
-        Vector2<Integer> relativePosition = player.gun.getComponent(Position.class).getRelativePosition();
-        double relativeX = relativePosition.x+0.1;
-        double relativeY = relativePosition.y+0.1;
+        for (int i = 0; i < player.guns.length; i++) {
+            Vector2<Integer> relativePosition = player.guns[i].getComponent(Position.class).getRelativePosition();
+            double relativeX = relativePosition.x+0.1;
+            double relativeY = relativePosition.y+0.1;
 
-        double pointDir = -Math.toDegrees(Math.atan((relativeY-Global.location.getMouse().getCursor().getPosition().y)/(relativeX-Global.location.getMouse().getCursor().getPosition().x)));
+            double pointDir = -Math.toDegrees(Math.atan((relativeY-Global.location.getMouse().getCursor().getPosition().y)/(relativeX-Global.location.getMouse().getCursor().getPosition().x)));
 
-        double trunkUp = ((double) delta/1000000000)*(player.stats.directionGunUp);
-        if ((relativeX-Global.location.getMouse().getCursor().getPosition().x)>0){
-            pointDir+=180;
-        } else if ((relativeY-Global.location.getMouse().getCursor().getPosition().y)<0){
-            pointDir+=360;
-        }
-
-        if ((pointDir - player.gun.getComponent(Position.class).getDirectionDraw()) > 0){
-            if ((pointDir - player.gun.getComponent(Position.class).getDirectionDraw()) > 180){
-                player.gun.getComponent(Position.class).setDirectionDraw(player.gun.getComponent(Position.class).getDirectionDraw() - trunkUp);
-            } else {
-                player.gun.getComponent(Position.class).setDirectionDraw(player.gun.getComponent(Position.class).getDirectionDraw() + trunkUp);
+            double trunkUp = ((double) delta/1000000000)*(player.stats.directionGunUp);
+            if ((relativeX-Global.location.getMouse().getCursor().getPosition().x)>0){
+                pointDir+=180;
+            } else if ((relativeY-Global.location.getMouse().getCursor().getPosition().y)<0){
+                pointDir+=360;
             }
-        } else {
-            if ((pointDir - player.gun.getComponent(Position.class).getDirectionDraw()) < -180){
-                player.gun.getComponent(Position.class).setDirectionDraw(player.gun.getComponent(Position.class).getDirectionDraw() + trunkUp);
-            } else {
-                player.gun.getComponent(Position.class).setDirectionDraw(player.gun.getComponent(Position.class).getDirectionDraw() - trunkUp);
-            }
-        }
 
-        if (    (Math.abs(pointDir - player.gun.getComponent(Position.class).getDirectionDraw()) < trunkUp*1.5) ||
-                (Math.abs(pointDir - player.gun.getComponent(Position.class).getDirectionDraw()) > 360-trunkUp*1.5)){
-            player.gun.getComponent(Position.class).setDirectionDraw(pointDir);
+            if ((pointDir - player.guns[i].getComponent(Position.class).getDirectionDraw()) > 0){
+                if ((pointDir - player.guns[i].getComponent(Position.class).getDirectionDraw()) > 180){
+                    player.guns[i].getComponent(Position.class).setDirectionDraw(player.guns[i].getComponent(Position.class).getDirectionDraw() - trunkUp);
+                } else {
+                    player.guns[i].getComponent(Position.class).setDirectionDraw(player.guns[i].getComponent(Position.class).getDirectionDraw() + trunkUp);
+                }
+            } else {
+                if ((pointDir - player.guns[i].getComponent(Position.class).getDirectionDraw()) < -180){
+                    player.guns[i].getComponent(Position.class).setDirectionDraw(player.guns[i].getComponent(Position.class).getDirectionDraw() + trunkUp);
+                } else {
+                    player.guns[i].getComponent(Position.class).setDirectionDraw(player.guns[i].getComponent(Position.class).getDirectionDraw() - trunkUp);
+                }
+            }
+
+            if (    (Math.abs(pointDir - player.guns[i].getComponent(Position.class).getDirectionDraw()) < trunkUp*1.5) ||
+                    (Math.abs(pointDir - player.guns[i].getComponent(Position.class).getDirectionDraw()) > 360-trunkUp*1.5)){
+                player.guns[i].getComponent(Position.class).setDirectionDraw(pointDir);
+            }
         }
     }
 

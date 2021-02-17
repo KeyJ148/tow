@@ -11,21 +11,27 @@ import tow.engine.gameobject.components.particles.Particles;
 import tow.engine.gameobject.components.render.Animation;
 import tow.engine.gameobject.components.render.GUIElement;
 import tow.engine.gameobject.components.render.Rendering;
+import tow.engine.gameobject.components.render.Sprite;
 import tow.game.client.ClientData;
 import tow.game.client.GameSetting;
 import tow.game.client.particles.Explosion;
 import tow.game.client.tanks.enemy.Enemy;
 import tow.engine.image.Color;
+import tow.game.client.tanks.player.Gun;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public abstract class Tank extends GameObject {
 
     public static final Color explodedTankColor = new Color(110, 15, 0);
 
     public GameObject armor;
-    public GameObject gun;
+    public GameObject[] guns = new GameObject[5];
+    public int[] gunsPosX = {0, -10, -10, 10, 10};
+    public int[] gunsPosY = {0, -10, 10, -10, 10};
     public GameObject camera;
     public GameObject nickname;
 
@@ -110,13 +116,17 @@ public abstract class Tank extends GameObject {
         camera.setComponent(new Follower(armor));
     }
 
-    public void replaceGun(GameObject newGun){
-        newGun.getComponent(Position.class).setDirectionDraw(gun.getComponent(Position.class).getDirectionDraw());
+    public void replaceGun(int i, GameObject newGun){
+        newGun.getComponent(Position.class).setDirectionDraw(guns[i].getComponent(Position.class).getDirectionDraw());
 
-        gun.destroy();
-        gun = newGun;
+        guns[i].destroy();
+        guns[i] = newGun;
         Global.location.objAdd(newGun);
         setColorGun(color);
+    }
+
+    public void runToGun(Consumer<GameObject> gunConsumer){
+        for (GameObject g : guns) gunConsumer.accept(g);
     }
 
     public void setColor(Color c){
@@ -130,6 +140,10 @@ public abstract class Tank extends GameObject {
     }
 
     public void setColorGun(Color c){
+        runToGun((gun) -> setColorGun(gun, c));
+    }
+
+    public void setColorGun(GameObject gun, Color c){
         if (gun == null || !gun.hasComponent(Rendering.class)) return;
         gun.getComponent(Rendering.class).color = c;
     }

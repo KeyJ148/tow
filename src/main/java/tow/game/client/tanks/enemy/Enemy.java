@@ -72,14 +72,16 @@ public class Enemy extends Tank {
         }
 
         //Инициализация пушки
-        if (gun == null){
-            TextureHandler gunTexture = TextureManager.getTexture("g_default");
-            gun = GameObjectFactory.create(x, y, directionGun, gunTexture);
-            gun.setComponent(new Movement());
-            gun.getComponent(Movement.class).directionDrawEquals = false;
-            gun.setComponent(new Follower(armor, false));
-            Global.location.objAdd(gun);
-            setColorGun(color);
+        for (int i = 0; i < guns.length; i++) {
+            if (guns[i] == null){
+                TextureHandler gunTexture = TextureManager.getTexture("g_default");
+                guns[i] = GameObjectFactory.create(x, y, directionGun, gunTexture);
+                guns[i].setComponent(new Movement());
+                guns[i].setComponent(new Follower(armor, false, gunsPosX[i], gunsPosY[i]));
+                guns[i].getComponent(Movement.class).directionDrawEquals = false;
+                Global.location.objAdd(guns[i]);
+                setColorGun(color);
+            }
         }
 
         //Инициализация камеры
@@ -92,7 +94,9 @@ public class Enemy extends Tank {
         armor.getComponent(Position.class).y = y;
         armor.getComponent(Position.class).setDirectionDraw(direction);
 
-        gun.getComponent(Position.class).setDirectionDraw(directionGun);
+        for (int i = 0; i < guns.length; i++) {
+            guns[i].getComponent(Position.class).setDirectionDraw(directionGun);
+        }
 
         //Для интерполяции (предсказания) движения врага
         armor.getComponent(Movement.class).speed = speed;
@@ -107,15 +111,20 @@ public class Enemy extends Tank {
 
     public void newArmor(String nameArmor){
         armor.setComponent(new Animation(TextureManager.getAnimation(nameArmor)));
+        armor.getComponent(Rendering.class).scale_x = 2;
+        armor.getComponent(Rendering.class).scale_y = 2;
         setColorArmor(color);
 
         Global.location.mapControl.update(armor);
     }
 
     public void newGun(String nameGun){
-        gun.setComponent(new Sprite(TextureManager.getTexture(nameGun)));
-        setColorGun(color);
 
-        Global.location.mapControl.update(gun);
+        for (int i = 0; i < guns.length; i++) {
+            guns[i].setComponent(new Sprite(TextureManager.getTexture(nameGun)));
+            setColorGun(color);
+
+            Global.location.mapControl.update(guns[i]);
+        }
     }
 }

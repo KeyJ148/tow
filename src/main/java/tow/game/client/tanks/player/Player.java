@@ -61,11 +61,13 @@ public class Player extends Tank {
         effects.add(((Armor) armor).effect);
         Global.location.objAdd(armor);
 
-        gun = new GDefault();
-        ((Gun) gun).init(this, x, y, direction, "GDefault");
-        effects.add(((Gun) gun).effect);
-        Global.location.objAdd(gun);
 
+        for (int i = 0; i < guns.length; i++) {
+            guns[i] = new GDefault();
+            ((Gun) guns[i]).init(this, x, y, direction, "GDefault", gunsPosX[i], gunsPosY[i]);
+            Global.location.objAdd(guns[i]);
+        }
+        effects.add(((Gun) guns[0]).effect);
         bullet = new BulletFactory("BDefault", this);
 
         updateStats();
@@ -76,7 +78,9 @@ public class Player extends Tank {
         setColor(color);
 
         setComponent(new Follower(armor));
-        gun.setComponent(new Follower(armor, false)); //TODO: gun.follower дублируется в 3-х местах
+        for (int i = 0; i < guns.length; i++) {
+            guns[i].setComponent(new Follower(armor, false, gunsPosX[i], gunsPosY[i]));
+        }
         camera.setComponent(new Follower(armor));
 
         hpLabel = GameObjectFactory.create(1, 10, 0);
@@ -141,7 +145,7 @@ public class Player extends Tank {
                 ((Label) ((GUIElement) statsLabel[i].getComponent(Rendering.class)).getComponent()).getTextState().setText(array[i]);
             }
             ((Label) ((GUIElement) statsLabel[array.length].getComponent(Rendering.class)).getComponent()).getTextState().setText("Armor: " + ((Armor) armor).title);
-            ((Label) ((GUIElement) statsLabel[array.length+1].getComponent(Rendering.class)).getComponent()).getTextState().setText("Gun: " + ((Gun) gun).title);
+            ((Label) ((GUIElement) statsLabel[array.length+1].getComponent(Rendering.class)).getComponent()).getTextState().setText("Gun: " + ((Gun) guns[0]).title);
             ((Label) ((GUIElement) statsLabel[array.length+2].getComponent(Rendering.class)).getComponent()).getTextState().setText("Bullet: " + bullet.title);
             ((Label) ((GUIElement) statsLabel[array.length+3].getComponent(Rendering.class)).getComponent()).getTextState().setText("Vampire: " + Math.round(vampire*100) + "%");
        } else {
@@ -208,15 +212,15 @@ public class Player extends Tank {
     }
 
     @Override
-    public void replaceGun(GameObject newGun){
-        effects.remove(((Gun) gun).effect);
+    public void replaceGun(int i, GameObject newGun){
+        effects.remove(((Gun) guns[i]).effect);
 
-        super.replaceGun(newGun);
-        effects.add(((Gun) newGun).effect);
+        super.replaceGun(i, newGun);
+        if (i ==0) effects.add(((Gun) newGun).effect);
         updateStats();
 
         //Отправляем сообщение о том, что мы сменили оружие
-        Global.tcpControl.send(20, ((Gun) newGun).texture.name);
+        if (i ==0) Global.tcpControl.send(20, ((Gun) newGun).texture.name);
     }
 
     //Игрок попал по врагу и нанес damage урона
@@ -234,7 +238,7 @@ public class Player extends Tank {
         return  Math.round(armor.getComponent(Position.class).x)
                 + " " + Math.round(armor.getComponent(Position.class).y)
                 + " " + Math.round(armor.getComponent(Position.class).getDirectionDraw())
-                + " " + Math.round(gun.getComponent(Position.class).getDirectionDraw())
+                + " " + Math.round(guns[0].getComponent(Position.class).getDirectionDraw())
                 + " " + Math.round(armor.getComponent(Movement.class).speed)
                 + " " + armor.getComponent(Movement.class).getDirection()
                 + " " + ((Animation) armor.getComponent(Rendering.class)).getFrameSpeed()
