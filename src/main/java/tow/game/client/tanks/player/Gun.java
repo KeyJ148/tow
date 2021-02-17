@@ -2,6 +2,7 @@ package tow.game.client.tanks.player;
 
 import tow.engine.Global;
 import tow.engine.Vector2;
+import tow.engine.gameobject.components.render.Rendering;
 import tow.engine.image.TextureHandler;
 import tow.engine.image.TextureManager;
 import tow.engine.gameobject.GameObject;
@@ -35,6 +36,8 @@ public class Gun extends GameObject {
 
 		setComponent(new Position(x, y, texture.depth, direction));
 		setComponent(new Sprite(texture));
+		getComponent(Rendering.class).scale_x = 0.5;
+		getComponent(Rendering.class).scale_y = 0.5;
 
 		setComponent(new Movement());
 		getComponent(Movement.class).directionDrawEquals = false;

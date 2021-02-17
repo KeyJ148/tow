@@ -79,6 +79,8 @@ public class Enemy extends Tank {
                 guns[i].setComponent(new Movement());
                 guns[i].setComponent(new Follower(armor, false, gunsPosX[i], gunsPosY[i]));
                 guns[i].getComponent(Movement.class).directionDrawEquals = false;
+                guns[i].getComponent(Rendering.class).scale_x = 0.5;
+                guns[i].getComponent(Rendering.class).scale_y = 0.5;
                 Global.location.objAdd(guns[i]);
                 setColorGun(color);
             }
@@ -111,8 +113,6 @@ public class Enemy extends Tank {
 
     public void newArmor(String nameArmor){
         armor.setComponent(new Animation(TextureManager.getAnimation(nameArmor)));
-        armor.getComponent(Rendering.class).scale_x = 2;
-        armor.getComponent(Rendering.class).scale_y = 2;
         setColorArmor(color);
 
         Global.location.mapControl.update(armor);
@@ -122,6 +122,8 @@ public class Enemy extends Tank {
 
         for (int i = 0; i < guns.length; i++) {
             guns[i].setComponent(new Sprite(TextureManager.getTexture(nameGun)));
+            guns[i].getComponent(Rendering.class).scale_x = 0.5;
+            guns[i].getComponent(Rendering.class).scale_y = 0.5;
             setColorGun(color);
 
             Global.location.mapControl.update(guns[i]);
