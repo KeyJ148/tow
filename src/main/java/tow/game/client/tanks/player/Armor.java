@@ -85,8 +85,8 @@ public class Armor extends GameObject {
 	public void loadData(){
 		ConfigReader cr = new ConfigReader(getConfigFileName());
 		
-		effect.addition.hpMax = cr.findDouble("HP_MAX")*20;
-		effect.addition.hpRegen = cr.findDouble("HP_REGEN")*20;
+		effect.addition.hpMax = cr.findDouble("HP_MAX")*5;
+		effect.addition.hpRegen = cr.findDouble("HP_REGEN")*5;
 		effect.addition.speedTankUp = cr.findDouble("SPEED_UP");
 		effect.addition.speedTankDown = cr.findDouble("SPEED_DOWN");
 		effect.addition.directionGunUp = cr.findDouble("DIRECTION_GUN_UP");
