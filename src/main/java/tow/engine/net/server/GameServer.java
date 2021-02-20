@@ -137,13 +137,18 @@ public class GameServer {
 			for (int i = 0; i< GameServer.peopleMax; i++){
 				MessagePack.Message message = null;
 
-				if (GameServer.connects[i].messagePack.haveMessage()){//Если у игрока имеются сообщения
+				//Пока у игрока имеются сообщения
+				while (GameServer.connects[i].messagePack.haveMessage()){
 					message = GameServer.connects[i].messagePack.get();//Читаем сообщение
+					if (message != null) {
+						if (message.inetType == MessagePack.Message.InetType.TCP) inetServerRead.readTCP(message);
+						if (message.inetType == MessagePack.Message.InetType.UDP) inetServerRead.readUDP(message);
+					}
 				}
-
-				if (message != null) {
-					if (message.inetType == MessagePack.Message.InetType.TCP) inetServerRead.readTCP(message);
-					if (message.inetType == MessagePack.Message.InetType.UDP) inetServerRead.readUDP(message);
+				try {
+					GameServer.connects[i].out.flush();
+				} catch (IOException e){
+					Global.logger.print("Flush failed (TCP)", Logger.Type.SERVER_ERROR);
 				}
 			}
 

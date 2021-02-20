@@ -12,7 +12,7 @@ public class MessagePack {
 	public int id;
 	
 	public MessagePack(int id){
-		this.messages = new LinkedBlockingQueue<>(1000);
+		this.messages = new LinkedBlockingQueue<>();
 		this.id = id;
 	}
 	
