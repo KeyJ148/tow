@@ -119,12 +119,13 @@ public class Enemy extends Tank {
     }
 
     public void newGun(String nameGun){
+        if (guns[0] != null) {
+            for (int i = 0; i < guns.length; i++) {
+                guns[i].setComponent(new Sprite(TextureManager.getTexture(nameGun)));
+                setColorGun(color);
 
-        for (int i = 0; i < guns.length; i++) {
-            guns[i].setComponent(new Sprite(TextureManager.getTexture(nameGun)));
-            setColorGun(color);
-
-            Global.location.mapControl.update(guns[i]);
+                Global.location.mapControl.update(guns[i]);
+            }
         }
     }
 }
