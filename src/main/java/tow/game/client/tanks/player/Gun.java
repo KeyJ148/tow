@@ -108,7 +108,7 @@ public class Gun extends GameObject {
 			directionTrunk[i] = trunkDir;
 		}
 
-		effect.addition.attackSpeed = cr.findDouble("ATTACK_SPEED")/5;
+		effect.addition.attackSpeed = cr.findDouble("ATTACK_SPEED")*5;
 		effect.addition.directionGunUp = cr.findDouble("DIRECTION_UP");
 		effect.addition.damage  = cr.findDouble("DAMAGE");
 		effect.addition.range = cr.findInteger("RANGE");
