@@ -137,10 +137,8 @@ public class GameServer {
 			for (int i = 0; i< GameServer.peopleMax; i++){
 				MessagePack.Message message = null;
 
-				synchronized(GameServer.connects[i].messagePack) {//Защита от одновременной работы с массивом
-					if (GameServer.connects[i].messagePack.haveMessage()){//Если у игрока имеются сообщения
-						message = GameServer.connects[i].messagePack.get();//Читаем сообщение
-					}
+				if (GameServer.connects[i].messagePack.haveMessage()){//Если у игрока имеются сообщения
+					message = GameServer.connects[i].messagePack.get();//Читаем сообщение
 				}
 
 				if (message != null) {

@@ -23,9 +23,7 @@ public class ServerReadTCP extends Thread{
 		try{
 			while (true){
 				str = GameServer.connects[id].in.readUTF();
-				synchronized(GameServer.connects[id].messagePack) {//Защита от одновременной работы с массивом
-					GameServer.connects[id].messagePack.add(str, MessagePack.Message.InetType.TCP);
-				}
+				GameServer.connects[id].messagePack.add(str, MessagePack.Message.InetType.TCP);
 			}
 		} catch (IOException e){
 			Global.logger.println("Player disconnect (id: " + id + ")", Logger.Type.SERVER_INFO);

@@ -37,9 +37,7 @@ public class ServerReadUDP extends Thread{
 				for (Connect connect : GameServer.connects){
 					if (connect.ipRemote.equals(ipSender) && connect.portUDP == portSender){
 						//Добавляем в очередь сообщений
-						synchronized(connect.messagePack) {//Защита от одновременной работы с массивом
-							connect.messagePack.add(str, MessagePack.Message.InetType.UDP);
-						}
+						connect.messagePack.add(str, MessagePack.Message.InetType.UDP);
 
 						break;
 					}

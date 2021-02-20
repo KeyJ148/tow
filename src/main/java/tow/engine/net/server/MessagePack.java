@@ -4,14 +4,15 @@ import tow.engine.Global;
 import tow.engine.logger.Logger;
 
 import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MessagePack {
 	
-	private LinkedList<Message> messages;//Список сообщений
+	private LinkedBlockingQueue<Message> messages;//Список сообщений
 	public int id;
 	
 	public MessagePack(int id){
-		this.messages = new LinkedList<>();
+		this.messages = new LinkedBlockingQueue<>(1000);
 		this.id = id;
 	}
 	
@@ -32,7 +33,7 @@ public class MessagePack {
 			Global.logger.println("Messages detained: " + size() + " (id: " + id + ")", Logger.Type.SERVER_DEBUG);
 		}
 		
-		return messages.removeFirst();
+		return messages.remove();
 	}
 	
 	public int size(){

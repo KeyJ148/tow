@@ -30,7 +30,7 @@ public abstract class Tank extends GameObject {
 
     public GameObject armor;
     public GameObject[] guns = new GameObject[5];
-    int DX = 8, DY = 8;
+    int DX = 12, DY = 12;
     public int[] gunsPosX = {0, -DX, -DX, DX, DX};
     public int[] gunsPosY = {0, -DY, DY, -DY, DY};
     public GameObject camera;
