@@ -122,7 +122,6 @@ public class Player extends Tank {
         }
     }
 
-
     @Override
     public void update(long delta){
         super.update(delta);
