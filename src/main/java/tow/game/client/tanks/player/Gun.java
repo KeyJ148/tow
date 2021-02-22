@@ -2,13 +2,13 @@ package tow.game.client.tanks.player;
 
 import tow.engine.Global;
 import tow.engine.Vector2;
-import tow.engine.image.TextureHandler;
-import tow.engine.image.TextureManager;
 import tow.engine.gameobject.GameObject;
 import tow.engine.gameobject.components.Follower;
 import tow.engine.gameobject.components.Movement;
 import tow.engine.gameobject.components.Position;
 import tow.engine.gameobject.components.render.Sprite;
+import tow.engine.image.TextureHandler;
+import tow.engine.image.TextureManager;
 import tow.engine.setting.ConfigReader;
 import tow.game.client.tanks.Effect;
 
@@ -40,6 +40,15 @@ public class Gun extends GameObject {
 		getComponent(Movement.class).directionDrawEquals = false;
 
 		setComponent(new Follower(player.armor, false, deltaX, deltaY));
+		Point p = new Point(10, 20);
+		System.out.println("Test records: " + p.x + ", " + p.x());
+	}
+
+	record Point(int x, int y){
+		@Override
+		public int x(){
+			return x+1;
+		}
 	}
 
 	@Override
