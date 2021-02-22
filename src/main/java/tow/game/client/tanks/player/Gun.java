@@ -40,15 +40,6 @@ public class Gun extends GameObject {
 		getComponent(Movement.class).directionDrawEquals = false;
 
 		setComponent(new Follower(player.armor, false, deltaX, deltaY));
-		Point p = new Point(10, 20);
-		System.out.println("Test records: " + p.x + ", " + p.x());
-	}
-
-	record Point(int x, int y){
-		@Override
-		public int x(){
-			return x+1;
-		}
 	}
 
 	@Override
